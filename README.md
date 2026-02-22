@@ -1,12 +1,13 @@
 # mouse-fixer
 
-A lightweight macOS daemon that automatically toggles natural scrolling when a Logitech USB Receiver is connected or disconnected.
+A lightweight macOS daemon that automatically toggles natural scrolling when any external mouse is connected or disconnected.
 
-When the receiver is plugged in, natural scrolling is turned **off** (traditional mouse direction). When it's removed, natural scrolling is turned **on** (trackpad-friendly direction).
+When a mouse is plugged in (USB, Bluetooth, or BLE), natural scrolling is turned **off** (traditional mouse direction). When all mice are removed, natural scrolling is turned **on** (trackpad-friendly direction).
 
 ## How it works
 
-- Uses IOKit to listen for USB device connect/disconnect events for the Logitech USB Receiver (vendor ID 1133, product ID 50475)
+- Uses IOHIDManager to detect any mouse device regardless of vendor or connection type (USB, Bluetooth, BLE)
+- Tracks multiple mice — natural scrolling only re-enables when all are disconnected
 - Calls the private `CGSSetSwipeScrollDirection` CoreGraphics API to change the scroll direction immediately — the same function macOS System Settings uses internally
 - Persists the preference and notifies System Settings so the UI stays in sync
 
